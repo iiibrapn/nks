@@ -8,18 +8,23 @@ jobs:
       - name: Where is this runner
         run: curl -s https://ipinfo.io/json
 
-      - name: DNS
-        run: getent hosts ${{ secrets.DEPLOY_HOST }} || echo "DNS failed"
+      - name: DNS (A records)
+        run: getent ahostsv4 vh374.timeweb.ru || echo "no A record"
 
-      - name: TCP ports
+      - name: TCP ports over IPv4
         run: |
+          IP=$(getent ahostsv4 vh374.timeweb.ru | awk '{print $1; exit}')
+          echo "resolved: $IP"
           for p in 22 80 443 21; do
-            timeout 10 bash -c "</dev/tcp/${{ secrets.DEPLOY_HOST }}/$p" \
+            timeout 5 bash -c "</dev/tcp/$IP/$p" \
               && echo "$p open" || echo "$p closed/filtered"
           done
 
-      - name: HTTP
-        run: curl -sS -m 15 -o /dev/null -w "%{http_code}\n" https://${{ secrets.DEPLOY_HOST }} || echo "http failed"
+      - name: HTTP over IPv4
+        run: curl -4 -sS -m 15 -o /dev/null -w "%{http_code}\n" https://vh374.timeweb.ru || echo "http failed"
 
-      - name: SSH banner
-        run: timeout 10 ssh -o StrictHostKeyChecking=no -o BatchMode=yes -p 22 nobody@${{ secrets.DEPLOY_HOST }} exit; echo "exit=$?"
+      - name: SSH over IPv4
+        run: |
+          timeout 10 ssh -4 -o StrictHostKeyChecking=no -o BatchMode=yes \
+            aisteron@vh374.timeweb.ru exit
+          echo "exit=$?"
