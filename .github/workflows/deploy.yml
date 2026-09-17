@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
 
-      - name: ssh deploy
+      - name: SSH Deploy
         uses: easingthemes/ssh-deploy@main
         with:
           ARGS: >-
@@ -29,4 +29,4 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: "/home/a/aisteron/wordpress/public_html/wp-content/"
-          EXCLUDE: "/upgrade/, /uploads/"
+          EXCLUDE: "/upgrade/, /uploads/, /.git/, /.github/, .gitignore"
