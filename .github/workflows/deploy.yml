@@ -12,6 +12,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
 
+      - name: GitHub Runner IP
+        run: echo "$(curl -s https://api.ipify.org)"
+
       - name: SSH Deploy
         uses: easingthemes/ssh-deploy@main
         with:
