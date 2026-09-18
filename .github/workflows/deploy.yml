@@ -26,7 +26,7 @@ jobs:
             --verbose
             --checksum
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          REMOTE_HOST: "92.53.96.13"
+          REMOTE_USER: "aisteron"
           TARGET: "/home/a/aisteron/wordpress/public_html/wp-content/"
           EXCLUDE: "/upgrade/, /uploads/, /.git/, /.github/, .gitignore"
